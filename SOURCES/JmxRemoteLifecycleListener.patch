@@ -1,0 +1,40 @@
+diff --git a/java/org/apache/catalina/mbeans/JmxRemoteLifecycleListener.java b/java/org/apache/catalina/mbeans/JmxRemoteLifecycleListener.java
+index f62f8d1..db19960 100644
+--- a/java/org/apache/catalina/mbeans/JmxRemoteLifecycleListener.java
++++ b/java/org/apache/catalina/mbeans/JmxRemoteLifecycleListener.java
+@@ -611,34 +611,28 @@ public class JmxRemoteLifecycleListener extends SSLHostConfig implements Lifecyc
+      * Better to use the internal API than re-invent the wheel.
+      */
+     @SuppressWarnings("restriction")
+-    private static class JmxRegistry extends sun.rmi.registry.RegistryImpl {
++    private static class JmxRegistry {
+         private static final long serialVersionUID = -3772054804656428217L;
+         private final String jmxName;
+         private final Remote jmxServer;
+         public JmxRegistry(int port, RMIClientSocketFactory csf,
+                 RMIServerSocketFactory ssf, String jmxName, Remote jmxServer) throws RemoteException {
+-            super(port, csf, ssf);
+             this.jmxName = jmxName;
+             this.jmxServer = jmxServer;
+         }
+-        @Override
+         public Remote lookup(String name)
+                 throws RemoteException, NotBoundException {
+             return (jmxName.equals(name)) ? jmxServer : null;
+         }
+-        @Override
+         public void bind(String name, Remote obj)
+                 throws RemoteException, AlreadyBoundException, AccessException {
+         }
+-        @Override
+         public void unbind(String name)
+                 throws RemoteException, NotBoundException, AccessException {
+         }
+-        @Override
+         public void rebind(String name, Remote obj)
+                 throws RemoteException, AccessException {
+         }
+-        @Override
+         public String[] list() throws RemoteException {
+             return new String[] { jmxName };
+         }
