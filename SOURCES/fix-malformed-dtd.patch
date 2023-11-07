@@ -1,0 +1,8 @@
+diff -up ./java/org/apache/tomcat/util/modeler/mbeans-descriptors.dtd.orig ./java/org/apache/tomcat/util/modeler/mbeans-descriptors.dtd
+--- ./java/org/apache/tomcat/util/modeler/mbeans-descriptors.dtd.orig	2023-02-07 14:11:25.294179017 -0500
++++ ./java/org/apache/tomcat/util/modeler/mbeans-descriptors.dtd	2023-02-07 14:11:28.629196705 -0500
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
