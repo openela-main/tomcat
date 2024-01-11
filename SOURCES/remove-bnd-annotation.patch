@@ -1,0 +1,74 @@
+diff --git a/build.xml b/build.xml
+index 5a0be1b..2131211 100644
+--- a/build.xml
++++ b/build.xml
+@@ -3062,7 +3062,7 @@ skip.installer property in build.properties" />
+ 
+   <target name="download-compile"
+           description="Download components necessary to compile"
+-          depends="setup-bnd">
++          >
+ 
+     <!-- Download Commons Daemon -->
+     <antcall target="downloadgz-2">
+diff --git a/java/org/apache/el/ExpressionFactoryImpl.java b/java/org/apache/el/ExpressionFactoryImpl.java
+index a6faeb6..5afbda7 100644
+--- a/java/org/apache/el/ExpressionFactoryImpl.java
++++ b/java/org/apache/el/ExpressionFactoryImpl.java
+@@ -33,7 +33,7 @@ import org.apache.el.util.MessageFactory;
+  *
+  * @author Jacob Hookom [jacob@hookom.net]
+  */
+-@aQute.bnd.annotation.spi.ServiceProvider(value=ExpressionFactory.class)
++//@aQute.bnd.annotation.spi.ServiceProvider(value=ExpressionFactory.class)
+ public class ExpressionFactoryImpl extends ExpressionFactory {
+ 
+     @Override
+diff --git a/java/org/apache/juli/logging/LogFactory.java b/java/org/apache/juli/logging/LogFactory.java
+index 56c805a..bd6eb0d 100644
+--- a/java/org/apache/juli/logging/LogFactory.java
++++ b/java/org/apache/juli/logging/LogFactory.java
+@@ -21,7 +21,7 @@ import java.nio.file.FileSystems;
+ import java.util.ServiceLoader;
+ import java.util.logging.LogManager;
+ 
+-import aQute.bnd.annotation.spi.ServiceConsumer;
++//import aQute.bnd.annotation.spi.ServiceConsumer;
+ 
+ /**
+  * This is a modified LogFactory that uses a simple {@link ServiceLoader} based
+@@ -63,7 +63,7 @@ import aQute.bnd.annotation.spi.ServiceConsumer;
+  * @author Costin Manolache
+  * @author Richard A. Sitze
+  */
+-@ServiceConsumer(value=org.apache.juli.logging.Log.class)
++//@ServiceConsumer(value=org.apache.juli.logging.Log.class)
+ public class LogFactory {
+ 
+     private static final LogFactory singleton = new LogFactory();
+diff --git a/java/org/apache/tomcat/websocket/WsContainerProvider.java b/java/org/apache/tomcat/websocket/WsContainerProvider.java
+index 3cb8873..7bc50f6 100644
+--- a/java/org/apache/tomcat/websocket/WsContainerProvider.java
++++ b/java/org/apache/tomcat/websocket/WsContainerProvider.java
+@@ -19,7 +19,7 @@ package org.apache.tomcat.websocket;
+ import javax.websocket.ContainerProvider;
+ import javax.websocket.WebSocketContainer;
+ 
+-@aQute.bnd.annotation.spi.ServiceProvider(value=ContainerProvider.class)
++//@aQute.bnd.annotation.spi.ServiceProvider(value=ContainerProvider.class)
+ public class WsContainerProvider extends ContainerProvider {
+ 
+     @Override
+diff --git a/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java b/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java
+index 5c385ed..2e4e82e 100644
+--- a/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java
++++ b/java/org/apache/tomcat/websocket/server/DefaultServerEndpointConfigurator.java
+@@ -26,7 +26,7 @@ import javax.websocket.HandshakeResponse;
+ import javax.websocket.server.HandshakeRequest;
+ import javax.websocket.server.ServerEndpointConfig;
+ 
+-@aQute.bnd.annotation.spi.ServiceProvider(value=ServerEndpointConfig.Configurator.class)
++//@aQute.bnd.annotation.spi.ServiceProvider(value=ServerEndpointConfig.Configurator.class)
+ public class DefaultServerEndpointConfigurator
+         extends ServerEndpointConfig.Configurator {
+ 
