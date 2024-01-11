@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 62
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00014-src
+%global packdname  %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00014-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       5%{?dist}.2
+Release:       27%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -88,7 +88,7 @@ Patch8:        fix-malformed-dtd.patch
 BuildArch:     noarch
 
 BuildRequires: ant
-BuildRequires: ecj >= 1:4.10
+BuildRequires: ecj
 BuildRequires: findutils
 BuildRequires: javapackages-local
 BuildRequires: aqute-bnd
@@ -106,7 +106,6 @@ Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
 
-# We will change it to an obsoletes whenever the pki team is able to make the switch
 Conflicts: pki-servlet-engine <= 1:9.0.50
 
 # added after log4j sub-package was removed
@@ -559,13 +558,43 @@ fi
 
 
 %changelog
-* Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-5.2
-- Resolves: RHEL-12884 Missing Tomcat POM files in RHEL 8.8
+* Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27
+- Related: RHEL-12543
+- Bump release number
 
-* Thu Oct 12 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-5.1
-- Resolves: RHEL-12542 HTTP/2: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)
-- Update source to include the CVE fixes
-- Update patch command
+* Thu Oct 12 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-16
+- Resolves: RHEL-12543 HTTP/2: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)
+- Remove JDK subpackges which are unused
+
+* Fri Sep 08 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-14
+- Related: RHEL-2330 Bump release number
+
+* Thu Sep 07 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-13
+- Resolves: RHEL-2330 Revert the fix for pki-servlet-engine
+
+* Fri Aug 25 2023 Coty Sutherland <csutherl@redhat.com> - 1:9.0.62-12
+- Related: #2184135 Declare file conflicts
+
+* Fri Aug 25 2023 Coty Sutherland <csutherl@redhat.com> - 1:9.0.62-11
+- Resolves: #2184135 Fix bug introduced in initial commit
+
+* Fri Aug 18 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-10
+- Resolves: #2210630 CVE-2023-28709 tomcat
+- Resolves: #2181448 CVE-2023-28708 tomcat: not including the secure attribute causes information disclosure
+
+* Thu Aug 17 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-9
+- Resolves: #2184135 Add Obsoletes to tomcat package
+
+* Thu Aug 17 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-8
+- Resolves: #2189676 Missing Tomcat POM files in RHEL 8.9
+
+* Tue Aug 15 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-7
+- Related: #2173874 Tomcat installs older java even though newer java is installed
+- Bump release number
+
+* Fri Aug 11 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-6
+- Resolves: #2173874 Tomcat installs older java even though newer java is installed
+- Sync with rhel-8.8.0 branch
 
 * Thu Feb 16 2023 Coty Sutherland <csutherl@redhat.com> - 1:9.0.62-5
 - Related: #2160455 Add conflicts to subpackage
