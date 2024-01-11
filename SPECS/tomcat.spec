@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       11%{?dist}.3
+Release:       37%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -89,7 +89,6 @@ BuildArch:     noarch
 BuildRequires: ant
 BuildRequires: ecj >= 1:4.10
 BuildRequires: findutils
-BuildRequires: java-devel >= 1:1.8.0
 BuildRequires: javapackages-local
 BuildRequires: aqute-bnd
 BuildRequires: aqute-bndlib
@@ -106,8 +105,8 @@ Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
 
-# We will change it to an obsoletes whenever the pki team is able to make the switch
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Provides:  pki-servlet-engine
+Obsoletes: pki-servlet-engine
 
 # added after log4j sub-package was removed
 Provides:         %{name}-log4j = %{epoch}:%{version}-%{release}
@@ -142,7 +141,7 @@ Provides: jsp = %{jspspec}
 Obsoletes: %{name}-jsp-2.2-api
 Requires: %{name}-servlet-%{servletspec}-api = %{epoch}:%{version}-%{release}
 Requires: %{name}-el-%{elspec}-api = %{epoch}:%{version}-%{release}
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Obsoletes: pki-servlet-engine
 
 %description jsp-%{jspspec}-api
 Apache Tomcat JSP API Implementation Classes.
@@ -154,7 +153,7 @@ Requires: %{name}-servlet-%{servletspec}-api = %{epoch}:%{version}-%{release}
 Requires: %{name}-el-%{elspec}-api = %{epoch}:%{version}-%{release}
 Requires: ecj >= 1:4.10
 Requires(preun): coreutils
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Obsoletes: pki-servlet-engine
 
 %description lib
 Libraries needed to run the Tomcat Web container.
@@ -165,7 +164,8 @@ Provides: servlet = %{servletspec}
 Provides: servlet6
 Provides: servlet3
 Obsoletes: %{name}-servlet-3.1-api
-Conflicts: pki-servlet-4.0-api <= 1:9.0.50
+Provides:  pki-servlet-4.0-api
+Obsoletes: pki-servlet-4.0-api
 
 %description servlet-%{servletspec}-api
 Apache Tomcat Servlet API Implementation Classes.
@@ -174,7 +174,7 @@ Apache Tomcat Servlet API Implementation Classes.
 Summary: Apache Tomcat Expression Language v%{elspec} API Implementation Classes
 Provides: el_api = %{elspec}
 Obsoletes: %{name}-el-2.2-api
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Obsoletes: pki-servlet-engine
 
 %description el-%{elspec}-api
 Apache Tomcat EL API Implementation Classes.
@@ -404,7 +404,6 @@ popd
 %mvn_artifact res/maven/tomcat-websocket-api.pom ${RPM_BUILD_ROOT}%{libdir}/websocket-api.jar
 %mvn_artifact res/maven/tomcat-websocket.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-websocket.jar
 %mvn_artifact res/maven/tomcat.pom
-
 %mvn_install
 
 %pre
@@ -560,16 +559,30 @@ fi
 
 
 %changelog
-* Tue Oct 17 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-11.3
-- Remove tomcat-9.0-JDTCompiler.patch which is unused
+* Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-37
+- Resolves: RHEL-12551
+- Remove JDK subpackges which are unused
 
-* Mon Oct 16 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-11.2
-- Resolves: RHEL-13721 Missing Tomcat POM files in RHEL 9.2
+* Fri Aug 25 2023 Coty Sutherland <csutherl@redhat.com> - 1:9.0.62-16
+- Related: #2184133 Declare file conflicts
 
-* Thu Oct 12 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-11.1
-- Resolves: RHEL-12550 HTTP/2: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)
-- Update source to include the CVE fix
+* Fri Aug 25 2023 Coty Sutherland <csutherl@redhat.com> - 1:9.0.62-15
+- Resolves: #2184133 Fix bug in Obsoletes
+
+* Tue Aug 01 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-14
+- Resolves: #2210632 CVE-2023-28709 tomcat
+
+* Wed Jul 26 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-13
+- Resolves: #2189675 Missing Tomcat POM files in RHEL 9.3
+
+* Wed Jun 21 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-12
+- Resolves: #2189675 Missing Tomcat POM files in RHEL 9.3
+- Resolves: #2173872 Remove java-11-openjdk-headles as a tomcat dependency
+- Resolves: #2181461 CVE-2023-28708 tomcat: not including the secure attribute causes information
+- Resolves: #2210632 CVE-2023-28709
+- Resolves: #2184133 Add Obsoletes to tomcat package
 - Update patch command
+- Update source to include the CVE fixes
 
 * Thu Feb 23 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-11
 - Bump release so that the NVR on RHEL-9 is higher than RHEL-8
