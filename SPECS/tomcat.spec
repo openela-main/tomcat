@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 62
-%global packdname  %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00014-src
+%global packdname  %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00018-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       27%{?dist}
+Release:       27%{?dist}.3
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -558,6 +558,19 @@ fi
 
 
 %changelog
+* Thu Jan 18 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-27.3
+- Resolves: RHEL-20721
+
+* Wed Dec 06 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27.2
+- Resolves: RHEL-13907
+- Resolves: RHEL-13904
+- Resolves: RHEL-12951
+- Resolves: RHEL-2386
+- Revert change for obsoleting pki-servlet-engine
+
+* Fri Nov 03 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27.1
+- Resolves: RHEL-6971 Add Obsoletes to tomcat package
+
 * Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27
 - Related: RHEL-12543
 - Bump release number
