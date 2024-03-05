@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 62
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00014-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00017-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       37%{?dist}
+Release:       37%{?dist}.1
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -559,6 +559,12 @@ fi
 
 
 %changelog
+* Wed Dec 06 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-37.1
+- Resolves: RHEL-13908
+- Resolves: RHEL-13905
+- Resolves: RHEL-12952
+- Resolves: RHEL-2388
+
 * Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-37
 - Resolves: RHEL-12551
 - Remove JDK subpackges which are unused
