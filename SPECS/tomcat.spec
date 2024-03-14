@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 62
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00017-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00018-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       37%{?dist}.1
+Release:       37%{?dist}.2
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -559,6 +559,9 @@ fi
 
 
 %changelog
+* Thu Jan 18 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-37.2
+- Resolves: RHEL-20723
+
 * Wed Dec 06 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-37.1
 - Resolves: RHEL-13908
 - Resolves: RHEL-13905
