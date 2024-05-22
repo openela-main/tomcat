@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       27%{?dist}.3
+Release:       30%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -106,7 +106,7 @@ Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
 
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Obsoletes: pki-servlet-engine <= 1:9.0.50
 
 # added after log4j sub-package was removed
 Provides:         %{name}-log4j = %{epoch}:%{version}-%{release}
@@ -141,7 +141,7 @@ Provides: jsp = %{jspspec}
 Obsoletes: %{name}-jsp-2.2-api
 Requires: %{name}-servlet-%{servletspec}-api = %{epoch}:%{version}-%{release}
 Requires: %{name}-el-%{elspec}-api = %{epoch}:%{version}-%{release}
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Obsoletes: pki-servlet-engine <= 1:9.0.50
 
 %description jsp-%{jspspec}-api
 Apache Tomcat JSP API Implementation Classes.
@@ -153,7 +153,7 @@ Requires: %{name}-servlet-%{servletspec}-api = %{epoch}:%{version}-%{release}
 Requires: %{name}-el-%{elspec}-api = %{epoch}:%{version}-%{release}
 Requires: ecj >= 1:4.10
 Requires(preun): coreutils
-Conflicts: pki-servlet-engine <= 1:9.0.50
+Obsoletes: pki-servlet-engine <= 1:9.0.50
 
 %description lib
 Libraries needed to run the Tomcat Web container.
@@ -164,7 +164,7 @@ Provides: servlet = %{servletspec}
 Provides: servlet6
 Provides: servlet3
 Obsoletes: %{name}-servlet-3.1-api
-Conflicts: pki-servlet-4.0-api <= 1:9.0.50
+Obsoletes: pki-servlet-4.0-api <= 1:9.0.50
 
 %description servlet-%{servletspec}-api
 Apache Tomcat Servlet API Implementation Classes.
@@ -173,7 +173,7 @@ Apache Tomcat Servlet API Implementation Classes.
 Summary: Apache Tomcat Expression Language v%{elspec} API Implementation Classes
 Provides: el_api = %{elspec}
 Obsoletes: %{name}-el-2.2-api
-Conflicts: pki-servlet-engine <= 1:9.0.50 and pki-servlet-container <= 1:9.0.7
+Obsoletes: pki-servlet-engine <= 1:9.0.50
 
 %description el-%{elspec}-api
 Apache Tomcat EL API Implementation Classes.
@@ -558,18 +558,18 @@ fi
 
 
 %changelog
-* Thu Jan 18 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-27.3
-- Resolves: RHEL-20721
+* Fri Jan 19 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-30
+- Resolves: RHEL-6971
 
-* Wed Dec 06 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27.2
+* Thu Jan 18 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-29
+- Resolves: RHEL-17602
+
+* Thu Nov 23 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-28
 - Resolves: RHEL-13907
 - Resolves: RHEL-13904
 - Resolves: RHEL-12951
+- Resolves: RHEL-12544
 - Resolves: RHEL-2386
-- Revert change for obsoleting pki-servlet-engine
-
-* Fri Nov 03 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27.1
-- Resolves: RHEL-6971 Add Obsoletes to tomcat package
 
 * Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-27
 - Related: RHEL-12543
