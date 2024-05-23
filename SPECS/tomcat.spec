@@ -31,8 +31,8 @@
 %global jspspec 2.3
 %global major_version 9
 %global minor_version 0
-%global micro_version 62
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00018-src
+%global micro_version 87
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00003-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       39%{?dist}
+Release:       1%{?dist}.1
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -82,7 +82,6 @@ Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        rhbz-1857043.patch
 Patch6:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
 Patch7:        JmxRemoteLifecycleListener.patch
-Patch8:        fix-malformed-dtd.patch
 
 BuildArch:     noarch
 
@@ -199,7 +198,6 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P4 -p0
 %patch -P6 -p0
 %patch -P7 -p1
-%patch -P8 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -559,18 +557,33 @@ fi
 
 
 %changelog
+* Fri May 03 2024 Sokratis Zappis <szappis@redhat.com> - 1:9.0.87-1.el9_4.1
+- Resolves: RHEL-34815 - Rebase tomcat to version 9.0.87
+- Resolves: RHEL-31048
+  tomcat: Apache Tomcat: WebSocket DoS with incomplete closing handshake (CVE-2024-23672)
+- Resolves: RHEL-31032
+  tomcat: : Apache Tomcat: HTTP/2 header handling DoS (CVE-2024-24549)
+- Resolves: RHEL-35328 - Amend tomcat's changelog
+  (CVE-2023-46589, CVE-2023-45648, CVE-2023-42795, CVE-2023-42794, CVE-2023-44487, CVE-2023-41080)
+
 * Thu Jan 18 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-39
 - Resolves: RHEL-17605
 
 * Thu Nov 23 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-38
 - Resolves: RHEL-13908
+  tomcat: incorrectly parsed http trailer headers can cause request smuggling (CVE-2023-45648)
 - Resolves: RHEL-13905
+  tomcat: improper cleaning of recycled objects could lead to information leak (CVE-2023-42795)
 - Resolves: RHEL-12952
+  tomcat: FileUpload: DoS due to accumulation of temporary files on Windows (CVE-2023-42794)
 - Resolves: RHEL-12552
+  tomcat: HTTP/2: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack) (CVE-2023-44487)
 - Resolves: RHEL-2388
+  tomcat: Open Redirect vulnerability in FORM authentication (CVE-2023-41080)
 
 * Fri Oct 13 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-37
 - Resolves: RHEL-12551
+  tomcat: HTTP/2: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack) (CVE-2023-44487)
 - Remove JDK subpackges which are unused
 
 * Fri Aug 25 2023 Coty Sutherland <csutherl@redhat.com> - 1:9.0.62-16
