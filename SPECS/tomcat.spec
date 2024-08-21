@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00003-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00005-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.1
+Release:       1%{?dist}.2
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -556,6 +556,10 @@ fi
 
 
 %changelog
+* Thu Aug 08 2024 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.2
+- Resolves: RHEL-46167
+  tomcat: Improper Handling of Exceptional Conditions (CVE-2024-34750)
+
 * Mon Jun 03 2024 Sokratis Zappis <szappis@redhat.com> - 1:9.0.87-1.el8_10.1
 - Resolves: RHEL-38548 - Amend tomcat package's changelog so that fixed CVEs are mentioned explicitly
 - Resolves: RHEL-35813 - Rebase tomcat to version 9.0.87
