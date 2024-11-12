@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.2
+Release:       2%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -93,7 +93,7 @@ BuildRequires: aqute-bnd
 BuildRequires: aqute-bndlib
 BuildRequires: systemd
 
-Requires:      (java-headless >= 1:1.8 or java-1.8.0-headless or java-11-headless or java-17-headless or java >= 1:1.8)
+Requires:      (java-headless >= 1:1.8 or java-1.8.0-headless or java-11-headless or java-17-headless or java-21-headless or java >= 1:1.8)
 Requires:      javapackages-tools
 Requires:      %{name}-lib = %{epoch}:%{version}-%{release}
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -557,21 +557,23 @@ fi
 
 
 %changelog
-* Thu Aug 08 2024 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el9_4.2
-- Resolves: RHEL-46162
+* Thu Aug 08 2024 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-2
+- Resolves: RHEL-46163
   tomcat: Improper Handling of Exceptional Conditions (CVE-2024-34750)
+- Resolves: RHEL-18245 - OpenJDK 21 support for RHEL Tomcat
 
-* Fri May 03 2024 Sokratis Zappis <szappis@redhat.com> - 1:9.0.87-1.el9_4.1
-- Resolves: RHEL-34815 - Rebase tomcat to version 9.0.87
-- Resolves: RHEL-31048
+* Fri May 03 2024 Sokratis Zappis <szappis@redhat.com> - 1:9.0.87-1
+- Resolves: RHEL-35812 - Rebase tomcat to version 9.0.87
+- Resolves: RHEL-29257
   tomcat: Apache Tomcat: WebSocket DoS with incomplete closing handshake (CVE-2024-23672)
-- Resolves: RHEL-31032
+- Resolves: RHEL-29252
   tomcat: : Apache Tomcat: HTTP/2 header handling DoS (CVE-2024-24549)
-- Resolves: RHEL-35328 - Amend tomcat's changelog
+- Resolves: RHEL-53001 - Amend tomcat's changelog
   (CVE-2023-46589, CVE-2023-45648, CVE-2023-42795, CVE-2023-42794, CVE-2023-44487, CVE-2023-41080)
 
 * Thu Jan 18 2024 Hui Wang <huwang@redhat.com> - 1:9.0.62-39
 - Resolves: RHEL-17605
+  tomcat: HTTP request smuggling via malformed trailer headers (CVE-2023-46589)
 
 * Thu Nov 23 2023 Hui Wang <huwang@redhat.com> - 1:9.0.62-38
 - Resolves: RHEL-13908
