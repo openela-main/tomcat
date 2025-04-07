@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00005-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00008-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       2%{?dist}
+Release:       2%{?dist}.1
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -557,6 +557,12 @@ fi
 
 
 %changelog
+* Wed Apr 02 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-2.el9_5.1
+- Resolves: RHEL-82946
+  tomcat: Potential RCE and/or information disclosure and/or information corruption with partial PUT (CVE-2025-24813)
+- Resolves: RHEL-71719
+  tomcat: RCE due to TOCTOU issue in JSP compilation (CVE-2024-50379)
+
 * Thu Aug 08 2024 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-2
 - Resolves: RHEL-46163
   tomcat: Improper Handling of Exceptional Conditions (CVE-2024-34750)
