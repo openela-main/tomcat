@@ -10,7 +10,8 @@ OPTIONS="-Dcatalina.base=$CATALINA_BASE \
 -Djava.endorsed.dirs=$JAVA_ENDORSED_DIRS \
 -Djava.io.tmpdir=$CATALINA_TMPDIR \
 -Djava.util.logging.config.file=${LOGGING_PROPERTIES} \
--Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager \
+-Dsun.io.useCanonCaches=false"
 
 if [ "$1" = "start" ] ; then
   FLAGS="${FLAGS} $CATALINA_OPTS"

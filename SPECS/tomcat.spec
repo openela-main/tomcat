@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00008-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00010-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.3
+Release:       1%{?dist}.4
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -556,6 +556,12 @@ fi
 
 
 %changelog
+* Mon May 26 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.4
+- Resolves: RHEL-91761
+  tomcat: DoS via malformed HTTP/2 PRIORITY_UPDATE frame (CVE-2025-31650)
+- Resolves: RHEL-71971
+  tomcat: Incomplete fix for CVE-2024-50379 - RCE due to TOCTOU issue in JSP compilation (CVE-2024-56337)
+
 * Wed Apr 02 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.3
 - Resolves: RHEL-82934
   tomcat: Potential RCE and/or information disclosure and/or information corruption with partial PUT (CVE-2025-24813)
