@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00008-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00010-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       2%{?dist}.1
+Release:       3%{?dist}.1
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -557,10 +557,16 @@ fi
 
 
 %changelog
-* Wed Apr 02 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-2.el9_5.1
-- Resolves: RHEL-82946
+* Mon May 26 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-3.el9_6.1
+- Resolves: RHEL-91765
+  tomcat: DoS via malformed HTTP/2 PRIORITY_UPDATE frame (CVE-2025-31650)
+- Resolves: RHEL-71981
+  tomcat: Incomplete fix for CVE-2024-50379 - RCE due to TOCTOU issue in JSP compilation (CVE-2024-56337)
+
+* Tue Apr 08 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-3
+- Resolves: RHEL-82945
   tomcat: Potential RCE and/or information disclosure and/or information corruption with partial PUT (CVE-2025-24813)
-- Resolves: RHEL-71719
+- Resolves: RHEL-71723
   tomcat: RCE due to TOCTOU issue in JSP compilation (CVE-2024-50379)
 
 * Thu Aug 08 2024 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-2
