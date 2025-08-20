@@ -32,7 +32,7 @@
 %global major_version 9
 %global minor_version 0
 %global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00010-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00012-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.4
+Release:       1%{?dist}.6
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -556,6 +556,24 @@ fi
 
 
 %changelog
+* Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.6
+- Resolves: RHEL-102193
+  tomcat: http/2 "MadeYouReset" DoS attack through HTTP/2 control frames (CVE-2025-48989)
+
+* Tue Aug 12 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.5
+- Resolves: RHEL-108486
+  tomcat: Apache Commons FileUpload DOS via part headers (CVE-2025-48976)
+- Resolves: RHEL-108494
+  tomcat: Dos in multipart upload (CVE-2025-48988)
+- Resolves: RHEL-108502
+  tomcat: Security constraint bypass for pre/post-resources (CVE-2025-49125)
+- Resolves: RHEL-108510
+  tomcat: Denial of service (CVE-2025-52434)
+- Resolves: RHEL-108524
+  tomcat: Denial of service (CVE-2025-52520)
+- Resolves: RHEL-108518
+  tomcat: Denial of service (CVE-2025-53506)
+
 * Mon May 26 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.4
 - Resolves: RHEL-91761
   tomcat: DoS via malformed HTTP/2 PRIORITY_UPDATE frame (CVE-2025-31650)
