@@ -1,0 +1,30 @@
+--- java/org/apache/jasper/compiler/JDTCompiler.java
++++ java/org/apache/jasper/compiler/JDTCompiler.java
+@@ -302,9 +302,9 @@
+             } else if (opt.equals("17")) {
+                 settings.put(CompilerOptions.OPTION_Source, CompilerOptions.VERSION_17);
+             } else if (opt.equals("18")) {
+-                settings.put(CompilerOptions.OPTION_Source, CompilerOptions.VERSION_18);
++                settings.put(CompilerOptions.OPTION_Source, "18");
+             } else if (opt.equals("19")) {
+-                settings.put(CompilerOptions.OPTION_Source, CompilerOptions.VERSION_19);
++                settings.put(CompilerOptions.OPTION_Source, "19");
+             } else if (opt.equals("20")) {
+                 // Constant not available in latest ECJ version that runs on
+                 // Java 11.
+@@ -392,11 +392,11 @@
+                 settings.put(CompilerOptions.OPTION_TargetPlatform, CompilerOptions.VERSION_17);
+                 settings.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_17);
+             } else if (opt.equals("18")) {
+-                settings.put(CompilerOptions.OPTION_TargetPlatform, CompilerOptions.VERSION_18);
+-                settings.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_18);
++                settings.put(CompilerOptions.OPTION_TargetPlatform, "18");
++                settings.put(CompilerOptions.OPTION_Compliance, "18");
+             } else if (opt.equals("19")) {
+-                settings.put(CompilerOptions.OPTION_TargetPlatform, CompilerOptions.VERSION_19);
+-                settings.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_19);
++                settings.put(CompilerOptions.OPTION_TargetPlatform, "19");
++                settings.put(CompilerOptions.OPTION_Compliance, "19");
+             } else if (opt.equals("20")) {
+                 // Constant not available in latest ECJ version that runs on
+                 // Java 11.
