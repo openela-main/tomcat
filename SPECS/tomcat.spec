@@ -54,7 +54,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.2
+Release:       3%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       Apache-2.0
@@ -543,20 +543,20 @@ exit 0
 %{appdir}/ROOT
 
 %changelog
-* Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-1.el10_0.2
-- Resolves: RHEL-102185
+* Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-3
+- Resolves: RHEL-102184
   tomcat: http/2 "MadeYouReset" DoS attack through HTTP/2 control frames (CVE-2025-48989)
-- Resolves: RHEL-108905
+- Resolves: RHEL-108906
   tomcat: Denial of service (CVE-2025-52520)
 
-* Wed Aug 13 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-1.el10_0.1
-- Resolves: RHEL-108899
-  tomcat: Apache Commons FileUpload DOS via part headers (CVE-2025-48976)
-- Resolves: RHEL-108901
+* Wed Aug 13 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-2
+- Resolves: RHEL-108900
+  tomcat: Apache  FileUpload DOS via part headers (CVE-2025-48976)
+- Resolves: RHEL-108902
   tomcat: Dos in multipart upload (CVE-2025-48988)
-- Resolves: RHEL-108903
+- Resolves: RHEL-108904
   tomcat: Security constraint bypass for pre/post-resources (CVE-2025-49125)
-- Resolves: RHEL-108907
+- Resolves: RHEL-108908
   tomcat: Denial of service (CVE-2025-53506)
 
 * Mon Apr 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-1
