@@ -32,7 +32,7 @@
 %global major_version 10
 %global minor_version 1
 %global micro_version 36
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00009-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00018-src
 %global servletspec 6.0
 %global elspec 5.0
 %global tcuid 53
@@ -54,7 +54,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       3%{?dist}
+Release:       3%{?dist}.1
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       Apache-2.0
@@ -543,6 +543,14 @@ exit 0
 %{appdir}/ROOT
 
 %changelog
+* Thu Nov 27 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-3.el10_1.1
+- Resolves: RHEL-124494
+  tomcat: Directory traversal via rewrite with possible RCE (CVE-2025-55752)
+- Resolves: RHEL-91729
+  tomcat: Bypass of rules in Rewrite Valve (CVE-2025-31651)
+- Resolves: RHEL-132527
+  tomcat: Denial of service (CVE-2025-61795)
+
 * Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-3
 - Resolves: RHEL-102184
   tomcat: http/2 "MadeYouReset" DoS attack through HTTP/2 control frames (CVE-2025-48989)
