@@ -1,0 +1,76 @@
+--- build.xml.orig	2026-02-16 10:21:26.627521704 -0500
++++ build.xml	2026-02-16 10:27:47.814614938 -0500
+@@ -977,7 +977,7 @@
+     <javac srcdir="java" destdir="${tomcat.classes}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${compile.release}"
++           source="11" target="11"
+            encoding="ISO-8859-1"
+            includeAntRuntime="true" >
+       <!-- Uncomment this to show unchecked warnings:
+@@ -1030,7 +1030,7 @@
+     <javac srcdir="java" destdir="${tomcat.classes}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${compile.release}"
++           source="11" target="11"
+            encoding="ISO-8859-1"
+            includeAntRuntime="true" >
+       <!-- Uncomment this to show unchecked warnings:
+@@ -1047,7 +1047,7 @@
+     <javac srcdir="java" destdir="${tomcat.classes}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${release.java.version}"
++           source="22" target="22"
+            encoding="ISO-8859-1"
+            includeAntRuntime="true"
+            if:set="has-ffm" >
+@@ -1610,7 +1610,7 @@
+     <javac   srcdir="webapps/examples/WEB-INF/classes"
+              destdir="${tomcat.build}/webapps/examples/WEB-INF/classes"
+              debug="${compile.debug}" deprecation="${compile.deprecation}"
+-             release="${compile.release}"
++             source="11" target="11"
+              classpath="${tomcat.classes}"
+              encoding="ISO-8859-1"
+              includeantruntime="false">
+@@ -1839,7 +1839,7 @@
+            destdir="${xreflect.directory}/classes"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${compile.release}"
++           source="11" target="11"
+            encoding="ISO-8859-1"
+            includeAntRuntime="true" >
+       <compilerarg value="-XDignore.symbol.file"/>
+@@ -1925,7 +1925,7 @@
+     <javac srcdir="test" destdir="${test.classes}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${compile.release}"
++           source="11" target="11"
+            encoding="ISO-8859-1"
+            includeantruntime="true">
+       <classpath refid="tomcat.test.classpath" />
+--- modules/jdbc-pool/build.xml.orig	2026-02-12 14:28:31.469893115 -0500
++++ modules/jdbc-pool/build.xml	2026-02-12 14:28:44.327503027 -0500
+@@ -163,7 +163,7 @@
+     <javac srcdir="${basedir}/src/main/java" destdir="${tomcat.classes}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${compile.release}"
++           source="11" target="11"
+            encoding="ISO-8859-1"
+            includeantruntime="false">
+       <classpath refid="tomcat.jdbc.classpath"/>
+@@ -201,7 +201,7 @@
+     <javac srcdir="${basedir}/src/test/java" destdir="${tomcat.testclasses}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+-           release="${compile.release}"
++           source="11" target="11"
+            encoding="ISO-8859-1"
+            includeantruntime="false">
+       <classpath refid="tomcat.jdbc.classpath"/>

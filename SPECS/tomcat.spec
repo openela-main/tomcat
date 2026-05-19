@@ -31,8 +31,8 @@
 %global jspspec 3.1
 %global major_version 10
 %global minor_version 1
-%global micro_version 36
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00018-src
+%global micro_version 49
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00007-src
 %global servletspec 6.0
 %global elspec 5.0
 %global tcuid 53
@@ -54,7 +54,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       3%{?dist}.1
+Release:       1%{?dist}.1
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       Apache-2.0
@@ -79,20 +79,22 @@ Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
 Patch5:        %{name}-%{major_version}.%{minor_version}-JDTCompiler.patch
 Patch6:        rhbz-1857043.patch
+# Patch 7 can be dropped when ECJ is updated to a newer version
+Patch7:        build-with-java-25.patch
 
 BuildArch:     noarch
 
 BuildRequires: ant >= 1.10.2
 BuildRequires: ecj >= 4.20
 BuildRequires: findutils
-BuildRequires: java-devel
 BuildRequires: javapackages-local
 BuildRequires: aqute-bnd
 BuildRequires: aqute-bndlib
 BuildRequires: systemd
 BuildRequires: tomcat-jakartaee-migration
+BuildRequires: java-25-devel
 
-Requires:      java-headless
+Requires:      (java-headless or java-25-headless)
 Requires:      javapackages-tools
 Requires:      %{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -204,6 +206,7 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch 4 -p0
 %patch 5 -p0
 %patch 6 -p0
+%patch 7 -p0
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -221,8 +224,12 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 # so just create a dummy file for later removal
 touch HACK
 
+# Adding JAVA_HOME to always compile with java-25 instead of autodetecting
+export JAVA_HOME=%{_jvmdir}/java-25-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
 # who needs a build.properties file anyway
-%{ant} -Dbase.path="." \
+ant -Dbase.path="." \
   -Dbuild.compiler="modern" \
   -Dcommons-daemon.jar="HACK" \
   -Dcommons-daemon.native.src.tgz="HACK" \
@@ -384,6 +391,7 @@ popd
 %mvn_file org.apache.tomcat:tomcat-catalina tomcat/catalina
 %mvn_artifact res/maven/tomcat-catalina.pom ${RPM_BUILD_ROOT}%{libdir}/catalina.jar
 %mvn_artifact res/maven/tomcat-coyote.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-coyote.jar
+%mvn_artifact res/maven/tomcat-coyote-ffm.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-coyote-ffm.jar
 %mvn_artifact res/maven/tomcat-dbcp.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-dbcp.jar
 %mvn_artifact res/maven/tomcat-i18n-cs.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-cs.jar
 %mvn_artifact res/maven/tomcat-i18n-de.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-de.jar
@@ -543,12 +551,19 @@ exit 0
 %{appdir}/ROOT
 
 %changelog
-* Thu Nov 27 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-3.el10_1.1
-- Resolves: RHEL-124494
+* Wed Apr 22 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.36-3.el10_1.1
+- Resolves: RHEL-150719
+  Certificate revocation bypass due to improper OCSP response validation (CVE-2026-24734)
+
+* Mon Feb 16 2026 Coty Sutherland <csutherl@redhat.com> - 1:10.1.49-1
+- Resolves: RHEL-150099 Rebase tomcat package to enable PQC features
+
+* Fri Jan 23 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.36-4
+- Resolves: RHEL-124493
   tomcat: Directory traversal via rewrite with possible RCE (CVE-2025-55752)
-- Resolves: RHEL-91729
+- Resolves: RHEL-132560
   tomcat: Bypass of rules in Rewrite Valve (CVE-2025-31651)
-- Resolves: RHEL-132527
+- Resolves: RHEL-132526
   tomcat: Denial of service (CVE-2025-61795)
 
 * Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-3
