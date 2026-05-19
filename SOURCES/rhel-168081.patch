@@ -1,0 +1,54 @@
+diff -up ./java/org/apache/coyote/ajp/Constants.java ./java/org/apache/coyote/ajp/Constants.java
+--- ./java/org/apache/coyote/ajp/Constants.java	2025-10-01 04:36:05.000000000 -0400
++++ ./java/org/apache/coyote/ajp/Constants.java	2026-04-14 15:27:50.820988961 -0400
+@@ -105,7 +105,7 @@
+
+     // Translates integer codes to names of HTTP methods
+     private static final String[] methodTransArray =
+-            { Method.OPTIONS, Method.GET, Method.HEAD, Method.POST, Method.PUT, Method.OPTIONS, Method.TRACE, Method.TRACE, Method.PROPPATCH, Method.MKCOL, Method.COPY,
++            { Method.OPTIONS, Method.GET, Method.HEAD, Method.POST, Method.PUT, Method.DELETE, Method.TRACE, Method.TRACE, Method.PROPPATCH, Method.MKCOL, Method.COPY,
+                     Method.MOVE, Method.LOCK, Method.UNLOCK, "ACL", "REPORT", "VERSION-CONTROL", "CHECKIN", "CHECKOUT", "UNCHECKOUT",
+                     "SEARCH", "MKWORKSPACE", "UPDATE", "LABEL", "MERGE", "BASELINE-CONTROL", "MKACTIVITY" };
+
+diff -up ./test/org/apache/catalina/realm/TestRealmBase.java ./test/org/apache/catalina/realm/TestRealmBase.java
+--- ./test/org/apache/catalina/realm/TestRealmBase.java	2025-10-01 04:36:05.000000000 -0400
++++ ./test/org/apache/catalina/realm/TestRealmBase.java	2026-04-14 15:27:50.821211035 -0400
+@@ -660,7 +660,7 @@
+         SecurityConstraint deleteConstraint = new SecurityConstraint();
+         deleteConstraint.addAuthRole(ROLE1);
+         SecurityCollection deleteCollection = new SecurityCollection();
+-        deleteCollection.addMethod(Method.OPTIONS);
++        deleteCollection.addMethod(Method.DELETE);
+         deleteCollection.addPatternDecoded("/*");
+         deleteConstraint.addCollection(deleteCollection);
+
+@@ -772,7 +772,7 @@
+
+         // Only user1 should be able to perform a DELETE as only that user has
+         // role1.
+-        request.setMethod(Method.OPTIONS);
++        request.setMethod(Method.DELETE);
+
+         SecurityConstraint[] constraintsDelete =
+                 mapRealm.findSecurityConstraints(request, context);
+diff -up ./webapps/docs/changelog.xml.orig ./webapps/docs/changelog.xml
+--- ./webapps/docs/changelog.xml.orig	2026-04-14 15:48:53.192243701 -0400
++++ ./webapps/docs/changelog.xml	2026-04-14 15:49:48.893470762 -0400
+@@ -104,6 +104,17 @@
+   They eventually become mixed with the numbered issues (i.e., numbered
+   issues do not "pop up" wrt. others).
+ -->
++<section name="Tomcat 9.0.110-redhat (csutherl)" rtext="">
++  <subsection name="Coyote">
++    <changelog>
++      <fix>
++        <bug>69848</bug>: Fix copy/paste error that meant DELETE
++        requests received via the AJP connector were processed as OPTIONS
++        requests. (markt)
++      </fix>
++    </changelog>
++  </subsection>
++</section>
+ <section name="Tomcat 9.0.110 (remm)" rtext="">
+   <subsection name="Catalina">
+     <changelog>

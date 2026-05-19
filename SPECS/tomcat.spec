@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -81,6 +81,7 @@ Patch2:        %{name}-build.patch
 Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        rhbz-1857043.patch
 Patch6:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
+Patch7:        rhel-168081.patch
 
 BuildArch:     noarch
 
@@ -197,6 +198,7 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P3 -p0
 %patch -P4 -p0
 %patch -P6 -p0
+%patch -P7 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -563,6 +565,9 @@ fi
 
 
 %changelog
+* Tue Apr 14 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-3
+- Resolves: RHEL-168081 Fix copy/paste error in AJP connector that caused DELETE requests to be processed as OPTIONS requests (BZ#69848)
+
 * Thu Feb 26 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-2
 - Resolves: RHEL-154364 Tomcat fails to respond to client connections when using Java 8
 
