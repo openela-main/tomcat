@@ -1,7 +1,6 @@
-diff -up ./build.xml.orig ./build.xml
---- build.xml.orig	2021-07-07 10:53:55.493742841 +0800
-+++ build.xml	2021-07-07 11:09:43.107968515 +0800
-@@ -1020,7 +1020,7 @@
+--- build.xml.orig	2026-02-11 15:17:18.947314996 -0500
++++ build.xml	2026-02-11 15:17:23.675329041 -0500
+@@ -1116,7 +1116,7 @@
        filesDir="${tomcat.classes}"
        filesId="files.annotations-api"
        manifest="${tomcat.manifests}/annotations-api.jar.manifest"
@@ -10,7 +9,7 @@ diff -up ./build.xml.orig ./build.xml
  
      <!-- Servlet Implementation JAR File -->
      <jarIt jarfile="${servlet-api.jar}"
-@@ -1029,41 +1029,41 @@
+@@ -1125,41 +1125,41 @@
        manifest="${tomcat.manifests}/servlet-api.jar.manifest"
        notice="${tomcat.manifests}/servlet-api.jar.notice"
        license="${tomcat.manifests}/servlet-api.jar.license"
@@ -58,7 +57,7 @@ diff -up ./build.xml.orig ./build.xml
  
      <!-- Bootstrap JAR File -->
      <jarIt jarfile="${bootstrap.jar}"
-@@ -1075,61 +1075,61 @@
+@@ -1171,68 +1171,68 @@
      <jarIt jarfile="${tomcat-util.jar}"
        filesDir="${tomcat.classes}"
        filesId="files.tomcat-util"
@@ -89,6 +88,14 @@ diff -up ./build.xml.orig ./build.xml
      <jarIt jarfile="${tomcat-coyote.jar}"
        filesDir="${tomcat.classes}"
        filesId="files.tomcat-coyote"
+-      addOSGi="true" />
++      addOSGi="false" />
+
+     <!-- OpenSSL FFM - Coyote -->
+     <jarIt jarfile="${tomcat-coyote-ffm.jar}"
+       filesDir="${tomcat.classes}"
+       filesId="files.tomcat-coyote-ffm"
+       manifest="${tomcat.manifests}/tomcat-coyote-ffm.jar.manifest"
 -      addOSGi="true" />
 +      addOSGi="false" />
  
@@ -130,7 +137,7 @@ diff -up ./build.xml.orig ./build.xml
  
      <!-- Catalina Ant Tasks JAR File -->
      <jarIt jarfile="${catalina-ant.jar}"
-@@ -1140,27 +1140,27 @@
+@@ -1243,27 +1243,27 @@
      <jarIt jarfile="${catalina-storeconfig.jar}"
        filesDir="${tomcat.classes}"
        filesId="files.catalina-storeconfig"
@@ -162,7 +169,7 @@ diff -up ./build.xml.orig ./build.xml
  
      <!-- i18n JARs -->
      <jar jarfile="${tomcat.build}/lib/tomcat-i18n-cs.jar"
-@@ -1620,7 +1620,7 @@
+@@ -1716,7 +1716,7 @@
             filesId="files.tomcat-embed-core"
             notice="${tomcat.manifests}/servlet-api.jar.notice"
             license="${tomcat.manifests}/servlet-api.jar.license"
@@ -171,7 +178,7 @@ diff -up ./build.xml.orig ./build.xml
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-core"
             graalFiles="res/graal/tomcat-embed-core/native-image"
-@@ -1628,7 +1628,7 @@
+@@ -1724,7 +1724,7 @@
      <jarIt jarfile="${tomcat-embed-el.jar}"
             filesDir="${tomcat.classes}"
             filesId="files.tomcat-embed-el"
@@ -180,7 +187,7 @@ diff -up ./build.xml.orig ./build.xml
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-el"
             graalFiles="res/graal/tomcat-embed-el/native-image"
-@@ -1637,7 +1637,7 @@
+@@ -1733,7 +1733,7 @@
             filesDir="${tomcat.classes}"
             filesId="files.tomcat-embed-jasper"
             meta-inf="${tomcat.manifests}/jasper.jar"
@@ -189,7 +196,7 @@ diff -up ./build.xml.orig ./build.xml
             addGraal="true"
             graalPrefix="org.apache.tomcat.embed/tomcat-embed-jasper"
             graalFiles="res/graal/tomcat-embed-jasper/native-image"
-@@ -1646,7 +1646,7 @@
+@@ -1742,7 +1742,7 @@
             filesDir="${tomcat.classes}"
             filesId="files.tomcat-embed-websocket"
             meta-inf="${tomcat.manifests}/tomcat-websocket.jar"

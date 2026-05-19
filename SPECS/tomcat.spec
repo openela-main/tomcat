@@ -31,8 +31,8 @@
 %global jspspec 2.3
 %global major_version 9
 %global minor_version 0
-%global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00013-src
+%global micro_version 110
+%global packdname apache-%{name}-%{major_version}.%{minor_version}.%{micro_version}-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,12 +56,12 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       6%{?dist}.1
+Release:       2%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
 URL:           http://tomcat.apache.org/
-Source0:       %{packdname}.zip
+Source0:       %{packdname}.tar.gz
 Source1:       %{name}-%{major_version}.%{minor_version}.conf
 Source3:       %{name}-%{major_version}.%{minor_version}.sysconfig
 Source4:       %{name}-%{major_version}.%{minor_version}.wrapper
@@ -81,7 +81,6 @@ Patch2:        %{name}-build.patch
 Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        rhbz-1857043.patch
 Patch6:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
-Patch7:        JmxRemoteLifecycleListener.patch
 
 BuildArch:     noarch
 
@@ -92,8 +91,9 @@ BuildRequires: javapackages-local
 BuildRequires: aqute-bnd
 BuildRequires: aqute-bndlib
 BuildRequires: systemd
+BuildRequires: java-25-devel
 
-Requires:      (java-headless >= 1:1.8 or java-1.8.0-headless or java-11-headless or java-17-headless or java-21-headless or java >= 1:1.8)
+Requires:      (java-headless >= 1:1.8 or java-1.8.0-headless or java-11-headless or java-17-headless or java-21-headless or java-25-headless or java >= 1:1.8)
 Requires:      javapackages-tools
 Requires:      %{name}-lib = %{epoch}:%{version}-%{release}
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -186,7 +186,7 @@ Requires: %{name} = %{epoch}:%{version}-%{release}
 The ROOT web application for Apache Tomcat.
 
 %prep
-%setup -q -n apache-%{packdname}
+%setup -q -n %{packdname}
 # remove pre-built binaries and windows files
 find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "*.gz" -o \
    -name "*.jar" -o -name "*.war" -o -name "*.zip" \) -delete
@@ -197,7 +197,6 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P3 -p0
 %patch -P4 -p0
 %patch -P6 -p0
-%patch -P7 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -217,8 +216,12 @@ export OPT_JAR_LIST="xalan-j2-serializer"
 # so just create a dummy file for later removal
 touch HACK
 
+# Adding JAVA_HOME to always compile with java-25 instead of autodetecting
+export JAVA_HOME=%{_jvmdir}/java-25-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
 # who needs a build.properties file anyway
-%{ant} -Dbase.path="." \
+ant -Dbase.path="." \
   -Dbuild.compiler="modern" \
   -Dcommons-daemon.jar="HACK" \
   -Dcommons-daemon.native.src.tgz="HACK" \
@@ -237,6 +240,9 @@ touch HACK
 
 # remove some jars that we'll replace with symlinks later
 %{__rm} output/build/lib/ecj.jar
+# Cleanup commons-daemon.jar that somehow appeared since last build, but is unnecessary
+%{__rm} -rf output/build/bin/commons-daemon.jar
+
 # Remove the example webapps per Apache Tomcat Security Considerations
 # see https://tomcat.apache.org/tomcat-9.0-doc/security-howto.html
 %{__rm} -rf output/build/webapps/examples
@@ -557,10 +563,17 @@ fi
 
 
 %changelog
-* Thu Nov 27 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-6.el9_7.1
-- Resolves: RHEL-124518
+* Thu Feb 26 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-2
+- Resolves: RHEL-154364 Tomcat fails to respond to client connections when using Java 8
+
+* Wed Feb 11 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-1
+- Resolves: RHEL-148687
+  Update to 9.0.110 and compile with Java 25 to enable FFM features for PQC support
+
+* Wed Jan 21 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.87-7
+- Resolves: RHEL-124516
   tomcat: Directory traversal via rewrite with possible RCE (CVE-2025-55752)
-- Resolves: RHEL-91753
+- Resolves: RHEL-132561
   tomcat: Bypass of rules in Rewrite Valve (CVE-2025-31651)
 
 * Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-6
