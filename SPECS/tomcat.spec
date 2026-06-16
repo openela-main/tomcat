@@ -31,7 +31,7 @@
 %global jspspec 2.3
 %global major_version 9
 %global minor_version 0
-%global micro_version 110
+%global micro_version 117
 %global packdname apache-%{name}-%{major_version}.%{minor_version}.%{micro_version}-src
 %global servletspec 4.0
 %global elspec 3.0
@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       3%{?dist}
+Release:       1%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -81,7 +81,6 @@ Patch2:        %{name}-build.patch
 Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        rhbz-1857043.patch
 Patch6:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
-Patch7:        rhel-168081.patch
 
 BuildArch:     noarch
 
@@ -198,7 +197,6 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P3 -p0
 %patch -P4 -p0
 %patch -P6 -p0
-%patch -P7 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -563,8 +561,36 @@ fi
 %defattr(0644,tomcat,tomcat,0755)
 %{appdir}/ROOT
 
-
 %changelog
+* Wed May 26 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.117-1
+- Resolves: RHEL-150714 Certificate revocation bypass due to improper OCSP response validation
+- Resolves:
+  Tomcat: OCSP checks sometimes soft-fail with FFM even when soft-fail is disabled (CVE-2026-34500)
+- Resolves:
+  Tomcat: Cloud membership for clustering component exposed the Kubernetes bearer token (CVE-2026-34487)
+- Resolves:
+  Tomcat: The fix for CVE-2026-29146 allowed the bypass of the EncryptInterceptor (CVE-2026-34486)
+- Resolves:
+  Tomcat: Incomplete escaping of JSON access logs (CVE-2026-34483)
+- Resolves:
+  Tomcat: The fix for CVE-2025-66614 was incomplete (CVE-2026-32990)
+- Resolves:
+  Tomcat: EncryptInterceptor vulnerable to padding oracle attack by default (CVE-2026-29146)
+- Resolves:
+  Tomcat: OCSP checks sometimes soft-fail even when soft-fail is disabled (CVE-2026-29145)
+- Resolves:
+  Tomcat: Configured TLS cipher preference order not preserved (CVE-2026-29129)
+- Resolves:
+  Tomcat: Occasionally open redirect (CVE-2026-25854)
+- Resolves:
+  Tomcat: Request smuggling via invalid chunk extension (CVE-2026-24880)
+- Resolves:
+  Tomcat: Incomplete OCSP verification checks (CVE-2026-24734)
+- Resolves:
+  Tomcat: Security constraint bypass (CVE-2026-24733)
+- Resolves:
+  Tomcat: Client certificate verification bypass due to virtual host mapping (CVE-2025-66614)
+
 * Tue Apr 14 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-3
 - Resolves: RHEL-168081 Fix copy/paste error in AJP connector that caused DELETE requests to be processed as OPTIONS requests (BZ#69848)
 
