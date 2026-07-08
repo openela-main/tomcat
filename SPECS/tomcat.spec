@@ -32,7 +32,7 @@
 %global major_version 10
 %global minor_version 1
 %global micro_version 49
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00007-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00011-src
 %global servletspec 6.0
 %global elspec 5.0
 %global tcuid 53
@@ -54,7 +54,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.1
+Release:       3%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       Apache-2.0
@@ -83,6 +83,7 @@ Patch6:        rhbz-1857043.patch
 Patch7:        build-with-java-25.patch
 
 BuildArch:     noarch
+ExclusiveArch:  %{java_arches} noarch
 
 BuildRequires: ant >= 1.10.2
 BuildRequires: ecj >= 4.20
@@ -218,6 +219,9 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %mvn_alias "org.apache.tomcat:tomcat-jsp-api" "jakarta.servlet:jakarta.servlet.jsp"
 %mvn_package ":tomcat-servlet-api" tomcat-servlet-api
 
+%pom_remove_dep org.apache.tomcat:tomcat-tribes res/maven/tomcat-storeconfig.pom
+%pom_remove_dep org.apache.tomcat:tomcat-catalina-ha res/maven/tomcat-storeconfig.pom
+
 
 %build
 # we don't care about the tarballs and we're going to replace jars
@@ -284,6 +288,10 @@ pushd output/build
     %{__cp} -a lib/*.jar ${RPM_BUILD_ROOT}%{libdir}
     %{__cp} -a webapps/* ${RPM_BUILD_ROOT}%{appdir}
 popd
+
+# Clustering is unsupported in RHEL
+rm -f ${RPM_BUILD_ROOT}%{libdir}/catalina-ha.jar
+rm -f ${RPM_BUILD_ROOT}%{libdir}/catalina-tribes.jar
 
 %{__sed} -e "s|\@\@\@TCHOME\@\@\@|%{homedir}|g" \
    -e "s|\@\@\@TCTEMP\@\@\@|%{tempdir}|g" \
@@ -386,8 +394,6 @@ popd
 %mvn_artifact res/maven/tomcat-api.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-api.jar
 %mvn_file org.apache.tomcat:tomcat-catalina-ant tomcat/catalina-ant
 %mvn_artifact res/maven/tomcat-catalina-ant.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ant.jar
-%mvn_file org.apache.tomcat:tomcat-catalina-ha tomcat/catalina-ha
-%mvn_artifact res/maven/tomcat-catalina-ha.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ha.jar
 %mvn_file org.apache.tomcat:tomcat-catalina tomcat/catalina
 %mvn_artifact res/maven/tomcat-catalina.pom ${RPM_BUILD_ROOT}%{libdir}/catalina.jar
 %mvn_artifact res/maven/tomcat-coyote.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-coyote.jar
@@ -415,8 +421,6 @@ popd
 %mvn_artifact res/maven/tomcat-ssi.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ssi.jar
 %mvn_file org.apache.tomcat:tomcat-storeconfig tomcat/catalina-storeconfig
 %mvn_artifact res/maven/tomcat-storeconfig.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-storeconfig.jar
-%mvn_file org.apache.tomcat:tomcat-tribes tomcat/catalina-tribes
-%mvn_artifact res/maven/tomcat-tribes.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-tribes.jar
 %mvn_artifact res/maven/tomcat-util-scan.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-util-scan.jar
 %mvn_artifact res/maven/tomcat-util.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-util.jar
 %mvn_file org.apache.tomcat:tomcat-websocket-api tomcat/websocket-api
@@ -551,6 +555,17 @@ exit 0
 %{appdir}/ROOT
 
 %changelog
+* Mon Jul 6 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.49-3
+- Related: RHEL-168577 Remove unnecessary patch
+
+* Thu Jun 4 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.49-2
+- Resolves: RHEL-168577 Remove tomcat clustering JAR from RPM builds
+  Resolves: CVE-2026-29146
+  tomcat: Apache Tomcat: Information disclosure via Padding Oracle vulnerability in EncryptInterceptor
+  Resolves: CVE-2026-34486
+  tomcat: Apache Tomcat: Missing Encryption of Sensitive Data due to EncryptInterceptor bypass
+
+
 * Wed Apr 22 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.36-3.el10_1.1
 - Resolves: RHEL-150719
   Certificate revocation bypass due to improper OCSP response validation (CVE-2026-24734)
@@ -565,6 +580,9 @@ exit 0
   tomcat: Bypass of rules in Rewrite Valve (CVE-2025-31651)
 - Resolves: RHEL-132526
   tomcat: Denial of service (CVE-2025-61795)
+
+* Mon Dec 15 2025 Eduard Abdullin <eabdullin@almalinux.org> - 1:10.1.36-4
+- Exclude i686 architecture from build
 
 * Thu Aug 14 2025 Adam Krajcik <akrajcik@redhat.com> - 1:10.1.36-3
 - Resolves: RHEL-102184
