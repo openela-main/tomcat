@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}.7
+Release:       2%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -83,7 +83,7 @@ Patch4:        rhbz-1857043.patch
 # remove bnd dependency which version is too low on rhel8
 Patch6:        remove-bnd-annotation.patch
 Patch7:        JmxRemoteLifecycleListener.patch
-
+Patch8:        rhel-168577.patch
 BuildArch:     noarch
 
 BuildRequires: ant
@@ -197,6 +197,7 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P4 -p0
 %patch -P6 -p1
 %patch -P7 -p1
+%patch -P8 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -208,6 +209,8 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %mvn_alias "org.apache.tomcat:tomcat-jsp-api" "org.eclipse.jetty.orbit:javax.servlet.jsp"
 %mvn_package ":tomcat-servlet-api" tomcat-servlet-api
 
+%pom_remove_dep org.apache.tomcat:tomcat-tribes res/maven/tomcat-storeconfig.pom
+%pom_remove_dep org.apache.tomcat:tomcat-catalina-ha res/maven/tomcat-storeconfig.pom
 
 %build
 export OPT_JAR_LIST="xalan-j2-serializer"
@@ -270,6 +273,10 @@ pushd output/build
     %{__cp} -a lib/*.jar ${RPM_BUILD_ROOT}%{libdir}
     %{__cp} -a webapps/* ${RPM_BUILD_ROOT}%{appdir}
 popd
+
+# Clustering is unsupported in RHEL
+rm -f ${RPM_BUILD_ROOT}%{libdir}/catalina-ha.jar
+rm -f ${RPM_BUILD_ROOT}%{libdir}/catalina-tribes.jar
 
 %{__sed} -e "s|\@\@\@TCHOME\@\@\@|%{homedir}|g" \
    -e "s|\@\@\@TCTEMP\@\@\@|%{tempdir}|g" \
@@ -364,8 +371,6 @@ popd
 %mvn_artifact res/maven/tomcat-api.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-api.jar
 %mvn_file org.apache.tomcat:tomcat-catalina-ant tomcat/catalina-ant
 %mvn_artifact res/maven/tomcat-catalina-ant.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ant.jar
-%mvn_file org.apache.tomcat:tomcat-catalina-ha tomcat/catalina-ha
-%mvn_artifact res/maven/tomcat-catalina-ha.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ha.jar
 %mvn_file org.apache.tomcat:tomcat-catalina tomcat/catalina
 %mvn_artifact res/maven/tomcat-catalina.pom ${RPM_BUILD_ROOT}%{libdir}/catalina.jar
 %mvn_artifact res/maven/tomcat-coyote.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-coyote.jar
@@ -392,8 +397,6 @@ popd
 %mvn_artifact res/maven/tomcat-ssi.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ssi.jar
 %mvn_file org.apache.tomcat:tomcat-storeconfig tomcat/catalina-storeconfig
 %mvn_artifact res/maven/tomcat-storeconfig.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-storeconfig.jar
-%mvn_file org.apache.tomcat:tomcat-tribes tomcat/catalina-tribes
-%mvn_artifact res/maven/tomcat-tribes.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-tribes.jar
 %mvn_artifact res/maven/tomcat-util-scan.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-util-scan.jar
 %mvn_artifact res/maven/tomcat-util.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-util.jar
 %mvn_file org.apache.tomcat:tomcat-websocket-api tomcat/websocket-api
@@ -556,6 +559,9 @@ fi
 
 
 %changelog
+* Thu Jun 4 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.87-2
+- Resolves: RHEL-183993 Remove tomcat clustering JAR from RPM builds
+
 * Thu Nov 27 2025 Adam Krajcik <akrajcik@redhat.com> - 1:9.0.87-1.el8_10.7
 - Resolves: RHEL-124507
   tomcat: Directory traversal via rewrite with possible RCE (CVE-2025-55752)
