@@ -31,8 +31,8 @@
 %global jspspec 2.3
 %global major_version 9
 %global minor_version 0
-%global micro_version 87
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00013-src
+%global micro_version 120
+%global packdname apache-%{name}-%{major_version}.%{minor_version}.%{micro_version}-src
 %global servletspec 4.0
 %global elspec 3.0
 %global tcuid 53
@@ -56,12 +56,12 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       2%{?dist}
+Release:       1%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
 URL:           http://tomcat.apache.org/
-Source0:       %{packdname}.zip
+Source0:       %{packdname}.tar.gz
 Source1:       %{name}-%{major_version}.%{minor_version}.conf
 Source3:       %{name}-%{major_version}.%{minor_version}.sysconfig
 Source4:       %{name}-%{major_version}.%{minor_version}.wrapper
@@ -82,19 +82,20 @@ Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        rhbz-1857043.patch
 # remove bnd dependency which version is too low on rhel8
 Patch6:        remove-bnd-annotation.patch
-Patch7:        JmxRemoteLifecycleListener.patch
-Patch8:        rhel-168577.patch
+
+
 BuildArch:     noarch
 
 BuildRequires: ant
-BuildRequires: ecj
+BuildRequires: ecj >= 1:4.10
 BuildRequires: findutils
+BuildRequires: java-17-openjdk-devel
 BuildRequires: javapackages-local
 BuildRequires: aqute-bnd
 BuildRequires: aqute-bndlib
 BuildRequires: systemd
 
-Requires:      (java-headless >= 1:1.8 or java-1.8.0-headless or java-11-headless or java-17-headless or java >= 1:1.8)
+Requires:      (java-headless >= 1:1.8 or java-1.8.0-headless or java-11-headless or java-17-headless or java-21-headless or java >= 1:1.8)
 Requires:      javapackages-tools
 Requires:      %{name}-lib = %{epoch}:%{version}-%{release}
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -185,7 +186,7 @@ Requires: %{name} = %{epoch}:%{version}-%{release}
 The ROOT web application for Apache Tomcat.
 
 %prep
-%setup -q -n apache-%{packdname}
+%setup -q -n %{packdname}
 # remove pre-built binaries and windows files
 find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "*.gz" -o \
    -name "*.jar" -o -name "*.war" -o -name "*.zip" \) -delete
@@ -196,8 +197,6 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P3 -p0
 %patch -P4 -p0
 %patch -P6 -p1
-%patch -P7 -p1
-%patch -P8 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -219,8 +218,12 @@ export OPT_JAR_LIST="xalan-j2-serializer"
 # so just create a dummy file for later removal
 touch HACK
 
+# Adding JAVA_HOME to always compile with java-17 instead of autodetecting
+export JAVA_HOME=%{_jvmdir}/java-17-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
 # who needs a build.properties file anyway
-%{ant} -Dbase.path="." \
+ant -Dbase.path="." \
   -Dbuild.compiler="modern" \
   -Dcommons-daemon.jar="HACK" \
   -Dcommons-daemon.native.src.tgz="HACK" \
@@ -238,6 +241,9 @@ touch HACK
 
 # remove some jars that we'll replace with symlinks later
 %{__rm} output/build/lib/ecj.jar
+# Cleanup commons-daemon.jar that somehow appeared since last build, but is unnecessary
+%{__rm} -rf output/build/bin/commons-daemon.jar
+
 # Remove the example webapps per Apache Tomcat Security Considerations
 # see https://tomcat.apache.org/tomcat-9.0-doc/security-howto.html
 %{__rm} -rf output/build/webapps/examples
@@ -403,7 +409,6 @@ popd
 %mvn_artifact res/maven/tomcat-websocket-api.pom ${RPM_BUILD_ROOT}%{libdir}/websocket-api.jar
 %mvn_artifact res/maven/tomcat-websocket.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-websocket.jar
 %mvn_artifact res/maven/tomcat.pom
-
 %mvn_install
 
 %pre
@@ -439,7 +444,7 @@ exit 0
 %systemd_preun %{name}.service
 
 %postun
-%systemd_postun_with_restart %{name}.service 
+%systemd_postun_with_restart %{name}.service
 
 %postun jsp-%{jspspec}-api
 if [ "$1" = "0" ]; then
@@ -459,7 +464,7 @@ if [ "$1" = "0" ]; then
         %{_javadir}/%{name}-el-%{elspec}-api.jar
 fi
 
-%files 
+%files
 %defattr(0664,root,tomcat,0755)
 %doc {LICENSE,NOTICE,RELEASE*}
 %attr(0755,root,root) %{_bindir}/%{name}-digest
@@ -558,7 +563,18 @@ fi
 %{appdir}/ROOT
 
 
+
 %changelog
+* Fri Jul 31 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.120-1
+- Resolves: RHEL-192806 HTTP/2 request headers not validated (CVE-2026-41293)
+- Resolves: RHEL-219561 Security constraint bypass via improper URL encoding in rewrite valve (CVE-2026-59083)
+- Resolves: RHEL-219581 Insufficient documentation for EncryptInterceptor may lead to insecure configurations (CVE-2026-59084)
+- Resolves: RHEL-238206 tomcat: Information disclosure due to HTTP Authentication Header exposure during WebSocket authentication (CVE-2026-42498)
+- Resolves: RHEL-238213 tomcat: Improper Handling of Case Sensitivity in LockOutRealm (CVE-2026-43513)
+- Resolves: RHEL-238260 tomcat: Improper Authorization allows security bypass (CVE-2026-43515)
+- Resolves: RHEL-238294 tomcat: Authentication bypass via digest authentication (CVE-2026-43512)
+- Resolves: RHEL-239018 tomcat: Apache Tomcat: Authentication bypass via missing critical step in JNDIRealm GSSAPI configuration (CVE-2026-55957)
+
 * Thu Jun 4 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.87-2
 - Resolves: RHEL-183993 Remove tomcat clustering JAR from RPM builds
 
