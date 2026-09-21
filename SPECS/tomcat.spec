@@ -32,7 +32,7 @@
 %global major_version 10
 %global minor_version 1
 %global micro_version 49
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00011-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00013-src
 %global servletspec 6.0
 %global elspec 5.0
 %global tcuid 53
@@ -54,7 +54,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       3%{?dist}
+Release:       4%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       Apache-2.0
@@ -555,6 +555,14 @@ exit 0
 %{appdir}/ROOT
 
 %changelog
+* Mon Jul 6 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.49-4
+- Resolves: RHEL-192817 tomcat: HTTP/2 request headers not validated (CVE-2026-41293)
+- Resolves: RHEL-192648 tomcat: Improper Input Validation vulnerability due to incomplete fix (CVE-2026-32990)
+- Resolves: RHEL-238208 tomcat: Information disclosure due to HTTP Authentication Header exposure during WebSocket authentication (CVE-2026-42498)
+- Resolves: RHEL-238224 tomcat: Improper Handling of Case Sensitivity in LockOutRealm (CVE-2026-43513)
+- Resolves: RHEL-238259 tomcat: Improper Authorization allows security bypass (CVE-2026-43515)
+- Resolves: RHEL-238284 tomcat: Authentication bypass via digest authentication (CVE-2026-43512)
+
 * Mon Jul 6 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.49-3
 - Related: RHEL-168577 Remove unnecessary patch
 
