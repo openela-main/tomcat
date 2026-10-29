@@ -32,7 +32,7 @@
 %global major_version 10
 %global minor_version 1
 %global micro_version 49
-%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00013-src
+%global packdname %{name}-%{major_version}.%{minor_version}.%{micro_version}.redhat-00016-src
 %global servletspec 6.0
 %global elspec 5.0
 %global tcuid 53
@@ -54,7 +54,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       4%{?dist}
+Release:       5%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       Apache-2.0
@@ -81,6 +81,7 @@ Patch5:        %{name}-%{major_version}.%{minor_version}-JDTCompiler.patch
 Patch6:        rhbz-1857043.patch
 # Patch 7 can be dropped when ECJ is updated to a newer version
 Patch7:        build-with-java-25.patch
+Patch8:        rhel-264918.patch
 
 BuildArch:     noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -208,6 +209,7 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch 5 -p0
 %patch 6 -p0
 %patch 7 -p0
+%patch 8 -p1
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -555,6 +557,22 @@ exit 0
 %{appdir}/ROOT
 
 %changelog
+* Fri Oct 02 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.49-5
+- Resolves: RHEL-264918
+  tomcat: Stalled TLS handshake when the server's first flight is too large
+- Resolves: RHEL-255786
+  tomcat: Security constraint bypass due to improper access control (CVE-2026-65182)
+- Resolves: RHEL-271888
+  tomcat: Authentication bypass via limited replay attack in DIGEST authenticator (CVE-2026-65905)
+- Resolves: RHEL-271766
+  tomcat: Access control bypass due to off-by-one error in RewriteValve [N] flag processing (CVE-2026-65927)
+- Resolves: RHEL-271791
+  tomcat: Unauthorized resource access via FORM authentication bypass (CVE-2026-68525)
+- Resolves: RHEL-271741
+  tomcat: Improper Authentication due to principal lookup failure (CVE-2026-68569)
+- Resolves: RHEL-271720
+  tomcat: Denial of Service via HTTP/2 allocation leak (CVE-2026-68763)
+
 * Mon Jul 6 2026 Pietro Meloni <pmeloni@redhat.com> - 1:10.1.49-4
 - Resolves: RHEL-192817 tomcat: HTTP/2 request headers not validated (CVE-2026-41293)
 - Resolves: RHEL-192648 tomcat: Improper Input Validation vulnerability due to incomplete fix (CVE-2026-32990)
