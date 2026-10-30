@@ -31,7 +31,7 @@
 %global jspspec 2.3
 %global major_version 9
 %global minor_version 0
-%global micro_version 120
+%global micro_version 121
 %global packdname apache-%{name}-%{major_version}.%{minor_version}.%{micro_version}-src
 %global servletspec 4.0
 %global elspec 3.0
@@ -565,6 +565,30 @@ fi
 
 
 %changelog
+* Fri Sep 11 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.121-1
+- Resolves: RHEL-255793
+  tomcat: Security constraint bypass due to improper access control (CVE-2026-65182)
+- Resolves:
+  Local information disclosure via Unix domain socket TOCTOU race condition (CVE-2026-65183)
+- Resolves: RHEL-271822
+  tomcat: Improper Input Validation allows HTTP/2 no-authority bypass of strict SNI validation (CVE-2026-65637)
+- Resolves: RHEL-271900
+  tomcat: Limited replay attack possible with DIGEST authentication (CVE-2026-65905)
+- Resolves: RHEL-271775
+  tomcat: Access control bypass due to off-by-one error in RewriteValve [N] flag processing (CVE-2026-65927)
+- Resolves:
+  DoS in WebSocket chat example (CVE-2026-66299)
+- Resolves:
+  Servlet role references can bypass declarative role constraints (CVE-2026-66422)
+- Resolves: RHEL-271798
+  tomcat: Unauthorized resource access via FORM authentication bypass(CVE-2026-68525)
+- Resolves: RHEL-271749
+  tomcat: Principal lookup could fail open in some cases (CVE-2026-68569)
+- Resolves:
+  Denial of Service via HTTP/2 allocation leak (CVE-2026-68763)
+- Resolves:
+  Default to Moderate (Impact missing upstream) (CVE-2026-73180)
+
 * Fri Jul 31 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.120-1
 - Resolves: RHEL-192806 HTTP/2 request headers not validated (CVE-2026-41293)
 - Resolves: RHEL-219561 Security constraint bypass via improper URL encoding in rewrite valve (CVE-2026-59083)
