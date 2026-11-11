@@ -56,7 +56,7 @@
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
-Release:       1%{?dist}
+Release:       3%{?dist}
 Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 License:       ASL 2.0
@@ -80,9 +80,7 @@ Patch1:        %{name}-%{major_version}.%{minor_version}-tomcat-users-webapp.pat
 Patch2:        %{name}-build.patch
 Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
 Patch4:        rhbz-1857043.patch
-Patch5:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
-
-
+Patch6:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
 
 BuildArch:     noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -199,7 +197,7 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 %patch -P2 -p0
 %patch -P3 -p0
 %patch -P4 -p0
-%patch -P5 -p0
+%patch -P6 -p0
 
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
@@ -448,7 +446,7 @@ exit 0
 %systemd_preun %{name}.service
 
 %postun
-%systemd_postun_with_restart %{name}.service
+%systemd_postun_with_restart %{name}.service 
 
 %postun jsp-%{jspspec}-api
 if [ "$1" = "0" ]; then
@@ -468,7 +466,7 @@ if [ "$1" = "0" ]; then
         %{_javadir}/%{name}-el-%{elspec}-api.jar
 fi
 
-%files
+%files 
 %defattr(0664,root,tomcat,0755)
 %doc {LICENSE,NOTICE,RELEASE*}
 %attr(0755,root,root) %{_bindir}/%{name}-digest
@@ -567,41 +565,81 @@ fi
 %{appdir}/ROOT
 
 %changelog
+* Wed Nov 4 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.121-2
+- Bump version
+
 * Fri Sep 11 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.121-1
-- Resolves: RHEL-255800
+- Resolves: RHEL-255801
   tomcat: Security constraint bypass due to improper access control (CVE-2026-65182)
 - Resolves:
   tomcat: Local information disclosure via Unix domain socket TOCTOU race condition (CVE-2026-65183)
-- Resolves: RHEL-271827
+- Resolves: RHEL-271828
   tomcat: Improper Input Validation allows HTTP/2 no-authority bypass of strict SNI validation (CVE-2026-65637)
-- Resolves: RHEL-271903
+- Resolves: RHEL-271905
   tomcat: Limited replay attack possible with DIGEST authentication (CVE-2026-65905)
-- Resolves: RHEL-271776
+- Resolves: RHEL-271777
   tomcat: Access control bypass due to off-by-one error in RewriteValve [N] flag processing (CVE-2026-65927)
 - Resolves:
   tomcat: DoS in WebSocket chat example (CVE-2026-66299)
 - Resolves:
   tomcat: Servlet role references can bypass declarative role constraints (CVE-2026-66422)
-- Resolves: RHEL-271800
+- Resolves: RHEL-271801
   tomcat: Unauthorized resource access via FORM authentication bypass(CVE-2026-68525)
-- Resolves: RHEL-271810
+- Resolves: RHEL-271840
   tomcat: Principal lookup could fail open in some cases (CVE-2026-68569)
-- Resolves: RHEL-271732
+- Resolves: RHEL-271729
   tomcat: Denial of Service via HTTP/2 allocation leak (CVE-2026-68763)
 - Resolves:
   tomcat: Default to Moderate (Impact missing upstream) (CVE-2026-73180)
 
+* Tue Jun 4 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.120-1
+- Resolves: RHEL-192824 tomcat: HTTP/2 request headers not validated (CVE-2026-41293)
+- Resolves: RHEL-192661 tomcat: Improper Input Validation vulnerability due to incomplete fix (CVE-2026-32990)
+- Resolves: RHEL-219555 tomcat: Security constraint bypass via improper URL encoding in rewrite valve (CVE-2026-59083)
+- Resolves: RHEL-219578 tomcat: Insufficient documentation for EncryptInterceptor may lead to insecure configurations (CVE-2026-59084)
+- Resolves: RHEL-238190 tomcat: Information disclosure due to HTTP Authentication Header exposure during WebSocket authentication (CVE-2026-42498)
+- Resolves: RHEL-238248 tomcat: Improper Handling of Case Sensitivity in LockOutRealm (CVE-2026-43513)
+- Resolves: RHEL-238272 tomcat: Improper Authorization allows security bypass (CVE-2026-43515)
+- Resolves: RHEL-238303 tomcat: Apache Tomcat: Authentication bypass via digest authentication (CVE-2026-43512)
 
-* Fri Jul 31 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.120-1
-- Resolves: RHEL-192825 HTTP/2 request headers not validated (CVE-2026-41293)
-- Resolves: RHEL-192659 Improper Input Validation vulnerability due to incomplete fix (CVE-2026-32990)
-- Resolves: RHEL-219565 Security constraint bypass via improper URL encoding in rewrite valve (CVE-2026-59083)
-- Resolves: RHEL-219573 Insufficient documentation for EncryptInterceptor may lead to insecure configurations (CVE-2026-59084)
-- Resolves: RHEL-238189 tomcat: Information disclosure due to HTTP Authentication Header exposure during WebSocket authentication (CVE-2026-42498)
-- Resolves: RHEL-238247 tomcat: Improper Handling of Case Sensitivity in LockOutRealm (CVE-2026-43513)
-- Resolves: RHEL-238277 tomcat: Improper Authorization allows security bypass (CVE-2026-43515)
-- Resolves: RHEL-238302 tomcat: Authentication bypass via digest authentication (CVE-2026-43512)
-- Related: RHEL-183992 Remove tomcat clustering JAR from RPM builds
+* Tue Jun 4 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.117-2
+- Resolves: RHEL-183992 Remove tomcat clustering JAR from RPM builds
+- Exclude i686 architecture from build
+
+* Wed May 26 2026 Pietro Meloni <pmeloni@redhat.com> - 1:9.0.117-1
+- Resolves: RHEL-150714 Certificate revocation bypass due to improper OCSP response validation
+- Resolves:
+  Tomcat: OCSP checks sometimes soft-fail with FFM even when soft-fail is disabled (CVE-2026-34500)
+- Resolves:
+  Tomcat: Cloud membership for clustering component exposed the Kubernetes bearer token (CVE-2026-34487)
+- Resolves:
+  Tomcat: The fix for CVE-2026-29146 allowed the bypass of the EncryptInterceptor (CVE-2026-34486)
+- Resolves:
+  Tomcat: Incomplete escaping of JSON access logs (CVE-2026-34483)
+- Resolves:
+  Tomcat: The fix for CVE-2025-66614 was incomplete (CVE-2026-32990)
+- Resolves:
+  Tomcat: EncryptInterceptor vulnerable to padding oracle attack by default (CVE-2026-29146)
+- Resolves:
+  Tomcat: OCSP checks sometimes soft-fail even when soft-fail is disabled (CVE-2026-29145)
+- Resolves:
+  Tomcat: Configured TLS cipher preference order not preserved (CVE-2026-29129)
+- Resolves:
+  Tomcat: Occasionally open redirect (CVE-2026-25854)
+- Resolves:
+  Tomcat: Request smuggling via invalid chunk extension (CVE-2026-24880)
+- Resolves:
+  Tomcat: Incomplete OCSP verification checks (CVE-2026-24734)
+- Resolves:
+  Tomcat: Security constraint bypass (CVE-2026-24733)
+- Resolves:
+  Tomcat: Client certificate verification bypass due to virtual host mapping (CVE-2025-66614)
+
+* Tue Apr 14 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-3
+- Resolves: RHEL-168081 Fix copy/paste error in AJP connector that caused DELETE requests to be processed as OPTIONS requests (BZ#69848)
+
+* Thu Feb 26 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-2
+- Resolves: RHEL-154364 Tomcat fails to respond to client connections when using Java 8
 
 * Wed Feb 11 2026 Coty Sutherland <csutherl@redhat.com> - 1:9.0.110-1
 - Resolves: RHEL-148687
@@ -957,7 +995,7 @@ fi
 
 * Wed Mar 4 2015 Alexander Kurtakov <akurtako@redhat.com> 1:8.0.18-4
 - Fix epoch bumped el_1_0_api that would override all other glassfish/jboss/etc. due to wrong epoch.
-- Drop old provides.
+- Drop old provides. 
 
 * Tue Mar 03 2015 Stephen Gallagher <sgallagh@redhat.com> 1:8.0.18-3
 - Bump epoch to maintain upgrade path from Fedora 22
@@ -994,7 +1032,7 @@ fi
 - Rewrite jsvc implementation, resolves: rhbz#1051743
 - Switch to java-headless R, resolves: rhbz#1068566
 - Create and own %%{_localstatedir}/lib/tomcats, resolves: rhbz#1026741
-- Add pom for tomcat-jdbc, resolves: rhbz#1011003
+- Add pom for tomcat-jdbc, resolves: rhbz#1011003 
 
 * Tue Jan 21 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 0:7.0.47-3
 - Fix installation of Maven metadata for tomcat-juli.jar
@@ -1048,7 +1086,7 @@ fi
 - Resolves: rhbz 889395 concat classpath correctly; chdir to $CATALINA_HOME
 
 * Fri Dec 7 2012 Ivan Afonichev <ivan.afonichev@gmail.com> 0:7.0.33-2
-- Resolves: rhbz 883806 refix logdir ownership
+- Resolves: rhbz 883806 refix logdir ownership 
 
 * Sun Dec 2 2012 Ivan Afonichev <ivan.afonichev@gmail.com> 0:7.0.33-1
 - Updated to 7.0.33
@@ -1073,7 +1111,7 @@ fi
 - Resolves: rhbz 820119 Remove bundled apache-commons-dbcp
 - Resolves: rhbz 814900 Added tomcat-coyote POM
 - Resolves: rhbz 810775 Remove systemv stuff from %%post scriptlet
-- Remove redhat-lsb R
+- Remove redhat-lsb R 
 
 * Mon Apr 9 2012 Ivan Afonichev <ivan.afonichev@gmail.com> 0:7.0.27-2
 - Fixed native download hack
